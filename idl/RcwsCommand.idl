@@ -1,0 +1,7 @@
+module messages {
+    struct RcwsCommand {
+        float pan;
+        float tilt;
+        boolean fire;
+    };
+};
