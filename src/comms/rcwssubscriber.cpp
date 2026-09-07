@@ -5,10 +5,20 @@
 RcwsSubscriber::RcwsSubscriber(dds_entity_t participant, QObject* parent)
     : QObject(parent), participant_(participant), running_(false)
 {
-    topic_ = dds_create_topic(participant, &messages_RcwsCommand_desc, "RcwsCommandTopic", NULL, NULL);
-    if (topic_ < 0) throw std::runtime_error("Gagal membuat RcwsCommand Topic");
+    dds_qos_t *qos = dds_create_qos();
 
-    reader_ = dds_create_reader(participant, topic_, NULL, NULL);
+    dds_qset_durability(qos, DDS_DURABILITY_VOLATILE);
+    dds_qset_reliability(qos, DDS_RELIABILITY_RELIABLE, DDS_SECS(1));
+    dds_qset_history(qos, DDS_HISTORY_KEEP_ALL, 10);
+
+    topic_ = dds_create_topic(participant, &messages_RcwsCommand_desc, "RcwsCommandTopic", NULL, NULL);
+    if (topic_ < 0) {
+        dds_delete_qos(qos);
+        throw std::runtime_error("Gagal membuat RcwsCommand Topic");
+    }
+
+    reader_ = dds_create_reader(participant, topic_, qos, NULL);
+    dds_delete_qos(qos);
     if (reader_ < 0) throw std::runtime_error("Gagal membuat RcwsCommand Reader");
 }
 
