@@ -1,4 +1,5 @@
 #include <QCoreApplication>
+#include "app/appcontroller.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +15,9 @@ int main(int argc, char *argv[])
 
     // If you do not need a running Qt event loop, remove the call
     // to QCoreApplication::exec() or use the Non-Qt Plain C++ Application template.
+
+    AppController appController;
+    appController.start();
 
     return QCoreApplication::exec();
 }
