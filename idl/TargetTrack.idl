@@ -1,0 +1,8 @@
+module Tactical {
+    struct TargetTrack {
+        double distance;
+        double bearing;
+        double latitude;
+        double longitude;
+    };
+};

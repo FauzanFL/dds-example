@@ -1,0 +1,8 @@
+module Weapon {
+    struct RCWSStatus {
+	@key string ship_id;
+        @key string rcws_id;
+        string state;
+        long ammo;
+    };
+};

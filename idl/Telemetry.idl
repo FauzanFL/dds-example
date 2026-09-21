@@ -1,8 +1,9 @@
-module messages {
+module Ship {
     struct Telemetry {
-        double latitude;
-        double longitude;
-        float altitude;
-        float speed;
+        @key string ship_id;
+        double speed;
+        double heading;
+	double latitude;
+	double longitude;
     };
 };

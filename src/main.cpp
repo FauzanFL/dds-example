@@ -1,23 +1,23 @@
 #include <QCoreApplication>
-#include "app/appcontroller.h"
+#include "dds/dds.hpp"
+#include "comms/rcwssubscriber.h"
+#include "comms/telemetrypublisher.h"
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+    qDebug() << "=== Memulai RCWS Gateway (Qt6 + CycloneDDS) ===";
 
-    // Set up code that uses the Qt event loop here.
-    // Call QCoreApplication::quit() or QCoreApplication::exit() to quit the application.
-    // A not very useful example would be including
-    // #include <QTimer>
-    // near the top of the file and calling
-    // QTimer::singleShot(5000, &a, &QCoreApplication::quit);
-    // which quits the application after 5 seconds.
+    try {
+        dds::domain::DomainParticipant participant{org::eclipse::cyclonedds::domain::default_id()};
 
-    // If you do not need a running Qt event loop, remove the call
-    // to QCoreApplication::exec() or use the Non-Qt Plain C++ Application template.
+        TelemetryPublisher telemetryPub(participant, true);
+        RcwsSubscriber rcwsSubs(participant);
 
-    AppController appController;
-    appController.start();
-
-    return QCoreApplication::exec();
+        return a.exec();
+    } catch (const dds::core::Exception& e) {
+        qCritical() << "Fatal DDS Error:" << e.what();
+        return -1;
+    }
 }

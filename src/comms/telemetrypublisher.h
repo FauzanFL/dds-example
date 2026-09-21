@@ -1,20 +1,37 @@
 #ifndef TELEMETRYPUBLISHER_H
 #define TELEMETRYPUBLISHER_H
 
-#include <dds/dds.h>
-#include <Telemetry.h>
+#include <QObject>
+#include <QTimer>
+#include <dds/dds.hpp>
+#include "Telemetry.hpp"
+#include "TargetTrack.hpp"
 
-class TelemetryPublisher
+class TelemetryPublisher : public QObject
 {
+    Q_OBJECT
 public:
-    explicit TelemetryPublisher(dds_entity_t participant);
-    ~TelemetryPublisher();
+    explicit TelemetryPublisher(dds::domain::DomainParticipant participant, bool includeTarget = false, QObject* parent = nullptr);
 
-    void publish(double lat, double lon, float alt, float speed);
+public slots:
+    void publishTelemetryData();
+    void publishTargetData();
 
 private:
-    dds_entity_t topic_;
-    dds_entity_t writer_;
+    dds::pub::Publisher publisher_;
+    dds::topic::Topic<Ship::Telemetry> telemetry_topic_;
+    dds::topic::Topic<Tactical::TargetTrack> target_topic_;
+
+    dds::pub::DataWriter<Ship::Telemetry> telemetry_writer_;
+    dds::pub::DataWriter<Tactical::TargetTrack> target_writer_;
+    QTimer* telemetry_timer_ = nullptr;
+    QTimer* target_timer_ = nullptr;
+    bool includeTarget_ = false;
+
+    double ship_hdg_ = 45;
+    double ship_lat_ = -7.350;
+    double ship_lon_ = 113.050;
+    double ship_speed_ = 21;
 };
 
 #endif // TELEMETRYPUBLISHER_H
