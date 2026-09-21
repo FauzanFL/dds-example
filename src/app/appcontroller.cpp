@@ -32,7 +32,10 @@ void AppController::start()
     if (rcwsSub_ && participant_ >= 0) {
         rcwsSub_->startListening();
         timer_.start(1000);
+        dds_domainid_t active_domain_id;
+        dds_get_domainid(participant_, &active_domain_id);
         qDebug() << "Aplikasi berbasis C API berjalan... Mempublikasikan Telemetry dan mendengarkan RCWS.";
+        qDebug() << "Domain id: " << active_domain_id;
     }
 }
 
