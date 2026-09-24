@@ -9,8 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Test)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Test)
 find_package(CycloneDDS-CXX REQUIRED)
 
 idlcxx_generate(
@@ -29,6 +29,7 @@ add_executable(dds_gateway_example
   src/comms/rcwssubscriber.h src/comms/rcwssubscriber.cpp
 
   src/config/qos_profiles.h
+  src/lib/jsonconverter.h src/lib/jsonconverter.cpp
 )
 
 target_include_directories(dds_gateway_example PRIVATE src ${IDL_OUT_DIR})
@@ -37,6 +38,27 @@ target_link_libraries(dds_gateway_example PRIVATE
   CycloneDDS-CXX::ddscxx
   generated
 )
+
+enable_testing()
+
+add_executable(test_serialization
+  tests/TestSerialization.cpp
+  src/lib/jsonconverter.h src/lib/jsonconverter.cpp
+)
+
+target_include_directories(test_serialization PRIVATE src ${IDL_OUT_DIR})
+
+target_link_libraries(test_serialization PRIVATE
+  Qt${QT_VERSION_MAJOR}::Core
+  Qt${QT_VERSION_MAJOR}::Test # Wajib agar QTest berfungsi
+  CycloneDDS-CXX::ddscxx
+  generated
+)
+
+target_compile_options(test_serialization PRIVATE --coverage -O0)
+target_link_options(test_serialization PRIVATE --coverage)
+
+add_test(NAME SerializationTest COMMAND test_serialization)
 
 include(GNUInstallDirs)
 install(TARGETS dds_gateway_example

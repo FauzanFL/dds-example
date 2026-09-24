@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QString>
 #include <dds/dds.hpp>
 #include "Telemetry.hpp"
 #include "TargetTrack.hpp"
@@ -32,6 +33,7 @@ private:
     double ship_lat_ = -7.350;
     double ship_lon_ = 113.050;
     double ship_speed_ = 21;
+    std::string ship_id_;
 };
 
 #endif // TELEMETRYPUBLISHER_H

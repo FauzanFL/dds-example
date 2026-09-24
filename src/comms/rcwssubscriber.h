@@ -2,6 +2,7 @@
 #define RCWSSUBSCRIBER_H
 
 #include <QObject>
+#include <QString>
 #include <dds/dds.hpp>
 #include "RCWSCommand.hpp"
 #include "RCWSStatus.hpp"

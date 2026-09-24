@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CycloneDDS
+  xmlns="https://cdds.io/config"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd"
+>
+  <Domain Id="0">
+    <General>
+      <Interfaces>
+        <NetworkInterface name="eth2"  priority="default" multicast="default" />
+      </Interfaces>
+      <AllowMulticast>true</AllowMulticast>
+      <MaxMessageSize>65500B</MaxMessageSize>
+    </General>
+    <Discovery>
+      <LeaseDuration>3 s</LeaseDuration>
+    </Discovery>
+    <Security>
+       <Authentication>
+          <IdentityCA>file:///etc/cyclonedds/certs/ca.crt</IdentityCA>
+          <IdentityCertificate>file:///etc/cyclonedds/certs/node.crt</IdentityCertificate>
+          <PrivateKey>file:///etc/cyclonedds/certs/node.key</PrivateKey>
+       </Authentication>
+       <AccessControl>
+          <PermissionsCA>file:///etc/cyclonedds/certs/ca.crt</PermissionsCA>
+          <Governance>file:///etc/cyclonedds/certs/governance.p7s</Governance>
+          <Permissions>file:///etc/cyclonedds/certs/permissions.p7s</Permissions>
+       </AccessControl>
+    </Security>
+    <Tracing>
+      <Verbosity>config</Verbosity>
+      <OutputFile>
+        /tmp/cdds.log.${CYCLONEDDS_PID}
+      </OutputFile>
+    </Tracing>
+  </Domain>
+</CycloneDDS>

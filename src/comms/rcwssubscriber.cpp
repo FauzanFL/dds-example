@@ -25,8 +25,8 @@ void MissionListener::on_data_available(dds::sub::DataReader<Ship::MissionRoute>
             // Lempar data ke thread utama melalui Signal Qt
             const auto& data = sample.data();
             qDebug().noquote() << "[Subscriber] Received MissionRoute Data";
-            qDebug() << "SHIP-ID: " << data.ship_id()
-                     << " | Waypoint: " << data.waypoint()
+            qDebug() << "SHIP-ID: " << QString::fromStdString(data.ship_id())
+                     << " | Waypoint: " << QString::fromStdString(data.waypoint())
                      << " | Latitude: " << data.latitude()
                      << " | Longitude: " << data.longitude();
             emit parent_->missionReceived(sample.data());
@@ -40,9 +40,9 @@ void CommandListener::on_data_available(dds::sub::DataReader<Weapon::RCWSCommand
         if (sample.info().valid()) {
             const auto& data = sample.data();
             qDebug().noquote() << "[Subscriber] Received Command Data";
-            qDebug() << "SHIP-ID: " << data.ship_id()
-                     << " | RCWS-ID: " << data.rcws_id()
-                     << " | CommandId: " << data.command_id()
+            qDebug() << "SHIP-ID: " << QString::fromStdString(data.ship_id())
+                     << " | RCWS-ID: " << QString::fromStdString(data.rcws_id())
+                     << " | CommandId: " << QString::fromStdString(data.command_id())
                      << " | Azimuth: " << data.azimuth()
                      << " | Elevation: " << data.elevation()
                      << " | Range: " << data.range();
@@ -57,9 +57,9 @@ void StatusListener::on_data_available(dds::sub::DataReader<Weapon::RCWSStatus>&
         if (sample.info().valid()) {
             const auto& data = sample.data();
             qDebug().noquote() << "[Subscriber] Received Status Data: ";
-            qDebug() << "SHIP-ID: " << data.ship_id()
-                     << " | RCWS-ID: " << data.rcws_id()
-                     << " | State: " << data.state()
+            qDebug() << "SHIP-ID: " << QString::fromStdString(data.ship_id())
+                     << " | RCWS-ID: " << QString::fromStdString(data.rcws_id())
+                     << " | State: " << QString::fromStdString(data.state())
                      << " | Ammo: " << data.ammo();
             emit parent_->statusReceived(sample.data());
         }

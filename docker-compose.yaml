@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  rcws_simulator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rcws-gateway-simulator:latest
+    container_name: dds_rcws_gateway
+    network_mode: "host" # Wajib agar multicast DDS discovery berfungsi antar host/container
+    environment:
+      - TERM=xterm-256color
+      - SHIP_ID=${SHIP_ID}
+      - CYCLONEDDS_URI=file:///etc/cyclonedds/cyclonedds.xml
+    volumes:
+      - ./cyclonedds.xml:/etc/cyclonedds/cyclonedds.xml:ro
+      - ${CERTS_PATH}:/etc/cyclonedds/certs:ro
+    stdin_open: true    # Mencegah EOF error pada std::cin
+    tty: true           # Memungkinkan tampilan menu console interaktif

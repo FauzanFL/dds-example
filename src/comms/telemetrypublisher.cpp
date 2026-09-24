@@ -9,7 +9,8 @@ TelemetryPublisher::TelemetryPublisher(dds::domain::DomainParticipant participan
     target_topic_(participant, "Tactical/TargetTrack"),
     telemetry_writer_(publisher_, telemetry_topic_, QoSProfile::TelemetryPub(publisher_)),
     target_writer_(publisher_, target_topic_, QoSProfile::TelemetryPub(publisher_)),
-    includeTarget_(includeTarget)
+    includeTarget_(includeTarget),
+    ship_id_(qEnvironmentVariable("SHIP_ID", "KRI-DEFAULT").toStdString())
 {
     telemetry_timer_ = new QTimer(this);
     connect(telemetry_timer_, &QTimer::timeout, this, &TelemetryPublisher::publishTelemetryData);
@@ -31,7 +32,7 @@ void TelemetryPublisher::publishTelemetryData() {
     ship_speed_ += 0.1;
 
     Ship::Telemetry telemetryData;
-    telemetryData.ship_id() = "KRI-247";
+    telemetryData.ship_id() = ship_id_;
     telemetryData.heading() = ship_hdg_;
     telemetryData.latitude() = ship_lat_;
     telemetryData.longitude() = ship_lon_;
