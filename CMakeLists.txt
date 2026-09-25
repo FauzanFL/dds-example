@@ -41,24 +41,29 @@ target_link_libraries(dds_gateway_example PRIVATE
 
 enable_testing()
 
-add_executable(test_serialization
-  tests/TestSerialization.cpp
-  src/lib/jsonconverter.h src/lib/jsonconverter.cpp
+function(add_qt_unit_test TEST_NAME)
+  add_executable(${TEST_NAME} ${ARGN})
+
+  target_include_directories(${TEST_NAME} PRIVATE src ${IDL_OUT_DIR})
+
+  target_link_libraries(${TEST_NAME} PRIVATE
+          Qt${QT_VERSION_MAJOR}::Core
+          Qt${QT_VERSION_MAJOR}::Test
+          CycloneDDS-CXX::ddscxx
+          generated
+      )
+
+  target_compile_options(${TEST_NAME} PRIVATE --coverage -O0)
+  target_link_options(${TEST_NAME} PRIVATE --coverage)
+
+  add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+
+endfunction()
+
+add_qt_unit_test(test_serialization
+    tests/TestSerialization.cpp
+    src/lib/jsonconverter.h src/lib/jsonconverter.cpp
 )
-
-target_include_directories(test_serialization PRIVATE src ${IDL_OUT_DIR})
-
-target_link_libraries(test_serialization PRIVATE
-  Qt${QT_VERSION_MAJOR}::Core
-  Qt${QT_VERSION_MAJOR}::Test # Wajib agar QTest berfungsi
-  CycloneDDS-CXX::ddscxx
-  generated
-)
-
-target_compile_options(test_serialization PRIVATE --coverage -O0)
-target_link_options(test_serialization PRIVATE --coverage)
-
-add_test(NAME SerializationTest COMMAND test_serialization)
 
 include(GNUInstallDirs)
 install(TARGETS dds_gateway_example
