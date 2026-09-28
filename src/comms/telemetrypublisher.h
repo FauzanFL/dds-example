@@ -13,6 +13,7 @@ class TelemetryPublisher : public QObject
     Q_OBJECT
 public:
     explicit TelemetryPublisher(dds::domain::DomainParticipant participant, bool includeTarget = false, QObject* parent = nullptr);
+    ~TelemetryPublisher();
 
 public slots:
     void publishTelemetryData();

@@ -24,4 +24,11 @@ inline dds::sub::qos::DataReaderQos StatusSub(const dds::sub::Subscriber& sub) {
     << dds::core::policy::Durability::Volatile()
     << dds::core::policy::History::KeepLast(1);
 }
+
+inline dds::sub::qos::DataReaderQos BestEffortVolatile(const dds::sub::Subscriber& sub) {
+    return sub.default_datareader_qos()
+    << dds::core::policy::Reliability::BestEffort()
+    << dds::core::policy::Durability::Volatile()
+    << dds::core::policy::History::KeepLast(1);
+}
 }

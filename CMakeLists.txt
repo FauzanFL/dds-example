@@ -65,6 +65,14 @@ add_qt_unit_test(test_serialization
     src/lib/jsonconverter.h src/lib/jsonconverter.cpp
 )
 
+add_qt_unit_test(test_dds)
+
+target_sources(test_dds
+  PRIVATE
+  tests/TestDDS.cpp
+  src/comms/telemetrypublisher.h src/comms/telemetrypublisher.cpp
+)
+
 include(GNUInstallDirs)
 install(TARGETS dds_gateway_example
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

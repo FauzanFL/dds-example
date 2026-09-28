@@ -25,6 +25,18 @@ TelemetryPublisher::TelemetryPublisher(dds::domain::DomainParticipant participan
     }
 }
 
+TelemetryPublisher::~TelemetryPublisher()
+{
+    // Hentikan timer sebelum objek hancur agar tidak ada sinyal nyasar
+    if (telemetry_timer_ && telemetry_timer_->isActive()) {
+        telemetry_timer_->stop();
+    }
+
+    if (target_timer_ && target_timer_->isActive()) {
+        target_timer_->stop();
+    }
+}
+
 void TelemetryPublisher::publishTelemetryData() {
     ship_hdg_ += 0.1;
     ship_lat_ += 0.0001;
